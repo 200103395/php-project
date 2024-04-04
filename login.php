@@ -35,6 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Invalid username or password. Please try again.";
     }
+    header("Location: index.php");
 }
 ?>
 

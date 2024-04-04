@@ -51,6 +51,7 @@
         .table {
             width: 100%;
             border-collapse: collapse;
+            background-color: white;
         }
         .table th, .table td {
             border: 1px solid #ddd;
@@ -84,7 +85,7 @@
                 $row = $result->fetch_assoc();
                 $firstName = $row['FirstName'];
                 $lastName = $row['LastName'];
-                echo "<div>" . $firstName ."</div>";
+                echo "<a href='account.php'><div>" . $firstName ."</div></a>";
                 echo "<div>" . $lastName ."</div>";
                 echo "<div><a href='logout.php'>Logout</a></div>";
                 $logged = true;
@@ -116,13 +117,12 @@
                             echo "<td>". $row['City'] ."</td>";
                             echo "<td>". $row['State'] ."</td>";
                             echo "<td>". $row['Zip'] ."</td>";
-                            echo "<td><a href=''>Update</a></td>";
-                            echo "<td><a href=''>Delete</a></td>";
+                            $vars = 'ShippingID=' . $row['ShippingID'] . '&Login=' . $row['Login'] . '&Name=' . $row['Name'] . '&Address=' . $row['Address'] . '&City=' . $row['City'] . '&State=' . $row['State'] . '&Zip=' . $row['Zip'];
+                            echo "<td><a href='shippingUpdate.php?${vars}'>Update</a></td>";
+                            echo "<td><a href='shippingDelete.php?${vars}'>Delete</a></td>";
                             echo "</tr>";
                         }
                         echo "</table>";
-                        // TODO: SHOW TABLE
-                        // TODO: FOR EACH ROW SHOW UPDATE/DELETE BUTTONS
                     }
                     echo "<a href='shipping.php'><button>Add New Shipping Address</button></a>"
                 ?>
@@ -131,6 +131,35 @@
         <div id="billing">
             <div class="content">
                 <h2>Billing Information</h2>
+                <?php
+                $query = "select * from p2billing where Login = '$login';";
+                $res = $db -> query($query);
+                if($res->num_rows == 0) {
+                    echo "<h3>No information yet</h3>";
+                } else {
+                    echo "<table class='table'>";
+                    echo "<tr><th>BillingID</th><th>Login</th><th>BillName</th><th>BillAddress</th><th>BillCity</th><th>BillState</th><th>BillZip</th><th>CardType</th><th>CardNumber</th><th>ExpDate</th><th>#</th><th>#</th></tr>";
+                    while($row = $res->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>". $row['BillingID'] ."</td>";
+                        echo "<td>". $row['Login'] ."</td>";
+                        echo "<td>". $row['BillName'] ."</td>";
+                        echo "<td>". $row['BillAddress'] ."</td>";
+                        echo "<td>". $row['BillCity'] ."</td>";
+                        echo "<td>". $row['BillState'] ."</td>";
+                        echo "<td>". $row['BillZip'] ."</td>";
+                        echo "<td>". $row['CardType'] ."</td>";
+                        echo "<td>". $row['CardNumber'] ."</td>";
+                        echo "<td>". $row['ExpDate'] ."</td>";
+                        $vars = 'BillingID=' . $row['BillingID'] . '&Login=' . $row['Login'] . '&BillName=' . $row['BillName'] . '&BillAddress=' . $row['BillAddress'] . '&BillCity=' . $row['BillCity'] . '&BillState=' . $row['BillState'] . '&BillZip=' . $row['BillZip'] . '&CardType=' . $row['CardType'] . '&CardNumber=' . $row['CardNumber'] . '&ExpDate=' . $row['ExpDate'];
+                        echo "<td><a href='billingUpdate.php?${vars}'>Update</a></td>";
+                        echo "<td><a href='billingDelete.php?${vars}'>Delete</a></td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                }
+                echo "<a href='billing.php'><button>Add New Billing Information</button></a>"
+                ?>
             </div>
         </div>
     </div>

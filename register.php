@@ -26,6 +26,7 @@
             exit();
         }
     }
+    header("Location: index.php");
 ?>
 
 <html>
@@ -38,15 +39,15 @@
 <div class="form">
     <form action="register.php" method="post">
         <label for="login">Login: </label>
-        <input type="text" id="login" name="login"><br>
+        <input type="text" id="login" name="login" maxlength="15"><br>
         <label for="firstName">First Name: </label>
-        <input type="text" id="firstName" name="firstName"><br>
+        <input type="text" id="firstName" name="firstName" maxlength="25"><br>
         <label for="lastName">Last Name: </label>
-        <input type="text" id="lastName" name="lastName"><br>
+        <input type="text" id="lastName" name="lastName" maxlength="60"><br>
         <label for="passwd">Password: </label>
-        <input type="password" id="passwd" name="passwd"><br>
+        <input type="password" id="passwd" name="passwd" maxlength="60"><br>
         <label for="email">Email: </label>
-        <input type="text" id="email" name="email"><br>
+        <input type="text" id="email" name="email" maxlength="40"><br>
         <label for="newsLetter">News Letter: </label><br>
         <input type="radio" id="yes" name="newsLetter" value="yes" required>
         <label for="yes">Yes</label>
