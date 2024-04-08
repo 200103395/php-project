@@ -1,13 +1,9 @@
 <?php
-    include 'openDbConn.php';
     include 'readSession.php';
-    if(!$logged) {
+    include 'openDbConn.php';
+    if($logged === false) {
         header("Location: index.php");
         exit();
-    }
-    function validate($login, $firstName, $lastName, $passwd, $email, $news, $db) {
-        //TODO: Validate account
-        return true;
     }
     $query = "SELECT * FROM p2user where Login = '$login'";
     $res = $db -> query($query);
@@ -22,62 +18,115 @@
     $Passwd = $row['Passwd'];
     $Email = $row['Email'];
     $News = $row['NewsLetter'];
-    if( $_SERVER["REQUEST_METHOD"] == "POST") {
-        $login = $_POST["login"];
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
-        $passwd = $_POST["passwd"];
-        $email = $_POST["email"];
-        $news = $_POST["newsLetter"];
-        if($Login !== $login) {
-            header("Location: index.php");
-            exit();
-        }
-
-        $valid = validate($login, $firstName, $lastName, $passwd, $email, $news, $db);
-        if( $valid !== true) {
-            echo $valid;
-            exit();
-        }
-
-        $query = "UPDATE P2User set FirstName='$firstName', LastName='$lastName', Passwd='$passwd', Email='$email', NewsLetter='$news' where Login='$login';";
-        $result = $db -> query($query);
-        if($result !== true) {
-            echo "Error: registering account";
-            exit();
-        }
-        header("Location: index.php");
-    }
-
-
 ?>
 
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Account Settings</title>
+    <title><?php echo $login; ?></title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: cornsilk;
+        }
+        #menu {
+            background-color: darkgray;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .row div {
+            padding: 5px 10px;
+            margin: 0 10px;
+            font-size: 24px;
+        }
+        .account {
+            font-size: 24px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .label {
+            flex: 1;
+            font-weight: bold;
+            padding-right: 10px;
+        }
+        .value {
+            flex: 3;
+        }
+        .login {
+            color: #333;
+        }
+        .email {
+            color: blue;
+        }
+        .news {
+            color: green;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .my-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .my-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div class="form">
-    <form action="account.php" method="post">
-        <label for="login">Login: </label>
-        <input type="text" id="login" name="login" readonly value="<?php echo $Login; ?>" maxlength="15"><br>
-        <label for="firstName">First Name: </label>
-        <input type="text" id="firstName" name="firstName" value="<?php echo $FirstName; ?>" maxlength="25"><br>
-        <label for="lastName">Last Name: </label>
-        <input type="text" id="lastName" name="lastName" value="<?php echo $LastName; ?>" maxlength="60"><br>
-        <label for="passwd">Password: </label>
-        <input type="password" id="passwd" name="passwd" value="<?php echo $Passwd; ?>" maxlength="60"><br>
-        <label for="email">Email: </label>
-        <input type="text" id="email" name="email" value="<?php echo $Email; ?>" maxlength="40"><br>
-        <label for="newsLetter">News Letter: </label><br>
-        <input type="radio" id="yes" name="newsLetter" value="yes" <?php if ($News == 'yes') echo 'checked'; ?> required>
-        <label for="yes">Yes</label>
-        <input type="radio" id="no" name="newsLetter" value="no"<?php if ($News == 'no') echo 'checked'; ?> >
-        <label for="no">No</label><br>
-        <input type="submit" value="Change Information">
-    </form>
+<?php include 'menu.php';?>
+<div class="account">
+    <div class="info">
+        <div class="label">Login:</div>
+        <div class="value"><?php echo $login; ?></div>
+    </div>
+    <div class="info">
+        <div class="label">First Name:</div>
+        <div class="value"><?php echo $FirstName; ?></div>
+    </div>
+    <div class="info">
+        <div class="label">Last Name:</div>
+        <div class="value"><?php echo $LastName; ?></div>
+    </div>
+    <div class="info">
+        <div class="label">Password:</div>
+        <div class="value"><?php echo $Passwd; ?></div>
+    </div>
+    <div class="info">
+        <div class="label">Email:</div>
+        <div class="value"><?php echo $Email; ?></div>
+    </div>
+    <div class="info">
+        <div class="label">News:</div>
+        <div class="value"><?php echo $News; ?></div>
+    </div>
+</div>
+<div class="button-container">
+    <a href="accountChange.php"><button class="my-button">Change Account Information</button></a>
 </div>
 </body>
 </html>

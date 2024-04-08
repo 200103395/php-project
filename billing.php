@@ -5,8 +5,35 @@ if(!$logged) {
     exit();
 }
 include 'openDbConn.php';
+include 'sanitizing.php';
 function validate($billingID, $name, $address, $city, $state, $zip, $cardType, $cardNumber, $expDate) {
-    // TODO: VALIDATE
+    if(noSpecials($billingID, 30) === false) {
+        return false;
+    }
+    if(noSpecials($name, 50) === false) {
+        return false;
+    }
+    if(noSpecials($address, 30) === false) {
+        return false;
+    }
+    if(noSpecials($city, 30) === false) {
+        return false;
+    }
+    if(noSpecials($state, 20) === false) {
+        return false;
+    }
+    if(noSpecials($zip, 10) === false) {
+        return false;
+    }
+    if($cardType !== "Visa" && $cardType !== "MasterCard" && $cardType !== "Discover" && $cardType !== "American Express") {
+        return false;
+    }
+    if(numberOnly($cardNumber, 16) === false) {
+        return false;
+    }
+    if(isValidDate($expDate) === false) {
+        return false;
+    }
     return true;
 }
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -39,10 +66,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title id="title">Create Shipping Address</title>
+    <title id="title">Create Billing Information</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: cornsilk;
+        }
+        #menu {
+            background-color: darkgray;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .row div {
+            padding: 5px 10px;
+            margin: 0 10px;
+            font-size: 24px;
+        }</style>
 </head>
 <body>
 <div class="form">
+    <?php include 'menu.php'?>
     <form action="billing.php" method="post">
         <label for="billingID">Billing ID: </label>
         <input type="text" id="billingID" name="billingID" maxlength="30" required><br>

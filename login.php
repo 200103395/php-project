@@ -44,9 +44,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: cornsilk;
+        }
+        #menu {
+            background-color: darkgray;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .row div {
+            padding: 5px 10px;
+            margin: 0 10px;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
+    <?php include 'menu.php';?>
     <div id="form">
         <form action="login.php" method="post">
             <label for="login">Login: </label>

@@ -1,6 +1,7 @@
 <?php
 include 'openDbConn.php';
 include 'readSession.php';
+include 'sanitizing.php';
 
 $BillingID = $_GET["BillingID"];
 $LoginGet = $_GET["Login"];
@@ -19,7 +20,33 @@ if( $login !== $LoginGet) {
 $vars = 'BillingID=' . $BillingID . '&Login=' . $LoginGet . '&BillName=' . $BillName . '&BillAddress=' . $BillAddress . '&BillCity=' . $BillCity . '&BillState=' . $BillState . '&BillZip=' . $BillZip . '&CardType=' . $CardType . '&CardNumber=' . $CardNumber . '&ExpDate=' . $ExpDate;
 
 function validate($billingID, $name, $address, $city, $state, $zip, $cardType, $cardNumber, $expDate) {
-    // TODO: VALIDATE
+    if(noSpecials($billingID, 30) === false) {
+        return false;
+    }
+    if(noSpecials($name, 50) === false) {
+        return false;
+    }
+    if(noSpecials($address, 30) === false) {
+        return false;
+    }
+    if(noSpecials($city, 30) === false) {
+        return false;
+    }
+    if(noSpecials($state, 20) === false) {
+        return false;
+    }
+    if(noSpecials($zip, 10) === false) {
+        return false;
+    }
+    if($cardType !== "Visa" && $cardType !== "MasterCard" && $cardType !== "Discover" && $cardType !== "American Express") {
+        return false;
+    }
+    if(numberOnly($cardNumber, 16) === false) {
+        return false;
+    }
+    if(isValidDate($expDate) === false) {
+        return false;
+    }
     return true;
 }
 if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -53,8 +80,30 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Update Billing Information</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: cornsilk;
+        }
+        #menu {
+            background-color: darkgray;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .row div {
+            padding: 5px 10px;
+            margin: 0 10px;
+            font-size: 24px;
+        }</style>
 </head>
 <body>
+<?php include 'menu.php';?>
 <div class="form">
     <form action="billingUpdate.php?<?php echo $vars;?>" method="post">
         <label for="billingID">Billing ID: </label>
