@@ -31,7 +31,7 @@
         if(noSpecials($state, 20) === false) {
             return false;
         }
-        if(noSpecials($zip, 10) === false) {
+        if(numberOnly($zip, 10) === false) {
             return false;
         }
         return true;

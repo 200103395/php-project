@@ -22,7 +22,7 @@ function validate($billingID, $name, $address, $city, $state, $zip, $cardType, $
     if(noSpecials($state, 20) === false) {
         return false;
     }
-    if(noSpecials($zip, 10) === false) {
+    if(numberOnly($zip, 10) === false) {
         return false;
     }
     if($cardType !== "Visa" && $cardType !== "MasterCard" && $cardType !== "Discover" && $cardType !== "American Express") {
